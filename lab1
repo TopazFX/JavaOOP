@@ -1,0 +1,95 @@
+import java.util.Scanner;
+
+public class ArrayOperations {
+    private static int[][] array = generateArray(3, 4);
+    private static Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) {
+        while (true) {
+            System.out.println("\nMenu:");
+            System.out.println("1) сreate a new array");
+            System.out.println("2) сhange an element value");
+            System.out.println("3) sort rows by ascending sum");
+            System.out.println("4) print the array");
+            System.out.println("5) see ya");
+            System.out.print("Choose an option: ");
+            int choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1 -> createNewArray();
+                case 2 -> changeElement();
+                case 3 -> sortRowsBySum();
+                case 4 -> printArray();
+                case 5 -> {
+                    System.out.println("exi");
+                    return;
+                }
+                default -> System.out.println("invalid");
+            }
+        }
+    }
+
+    private static int[][] generateArray(int rows, int cols) {
+        int[][] arr = new int[rows][cols];
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                arr[i][j] = (int) (100 * Math.random());
+            }
+        }
+        return arr;
+    }
+
+    private static void createNewArray() {
+        System.out.print("enter the number of rows: ");
+        int rows = scanner.nextInt();
+        System.out.print("enter the number of columns: ");
+        int cols = scanner.nextInt();
+        array = generateArray(rows, cols);
+        System.out.println("array created");
+    }
+
+    private static void changeElement() {
+        System.out.print("enter row index: ");
+        int row = scanner.nextInt();
+        System.out.print("enter column index: ");
+        int col = scanner.nextInt();
+        
+        if (row >= 0 && row < array.length && col >= 0 && col < array[0].length) {
+            System.out.print("enter new value: ");
+            array[row][col] = scanner.nextInt();
+            System.out.println("Value changed!");
+        } else {
+            System.out.println("Invalid index!");
+        }
+    }
+
+    private static void sortRowsBySum() {
+        for (int i = 0; i < array.length - 1; i++) {
+            for (int j = 0; j < array.length - 1 - i; j++) {
+                if (rowSum(array[j]) > rowSum(array[j + 1])) {
+                    int[] temp = array[j];
+                    array[j] = array[j + 1];
+                    array[j + 1] = temp;
+                }
+            }
+        }
+        System.out.println("rows sorted");
+    }
+
+    private static int rowSum(int[] row) {
+        int sum = 0;
+        for (int num : row) {
+            sum += num;
+        }
+        return sum;
+    }
+
+    private static void printArray() {
+        for (int[] row : array) {
+            for (int num : row) {
+                System.out.printf("%4d", num);
+            }
+            System.out.println();
+        }
+    }
+}
