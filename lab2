@@ -1,0 +1,137 @@
+import java.util.Arrays;
+
+public class Vector {
+    private int[] vec;
+    private int size;
+    
+    public Vector() {
+        this(8);
+    }
+    
+    public Vector(int capacity) {
+        vec = new int[capacity];
+        size = 0;
+    }
+    
+    public Vector(int[] ar) {
+        vec = Arrays.copyOf(ar, ar.length * 2);
+        size = ar.length;
+    }
+    
+    public int size() {
+        return size;
+    }
+    
+    public boolean isEmpty() {
+        return size == 0;
+    }
+    
+    public int capacity() {
+        return vec.length;
+    }
+    
+    public int get(int index) {
+        if (index < 0 || index >= size) return -666;
+        return vec[index];
+    }
+    
+    public int set(int index, int newValue) {
+        if (index < 0 || index >= size) return -666;
+        int oldValue = vec[index];
+        vec[index] = newValue;
+        return oldValue;
+    }
+    
+    public void add(int value) {
+        ensureCapacity();
+        vec[size++] = value;
+    }
+    
+    public boolean add(int index, int value) {
+        if (index < 0 || index > size) return false;
+        ensureCapacity();
+        System.arraycopy(vec, index, vec, index + 1, size - index);
+        vec[index] = value;
+        size++;
+        return true;
+    }
+    
+    public void addAll(int[] ar) {
+        while (size + ar.length > vec.length) {
+            ensureCapacity();
+        }
+        System.arraycopy(ar, 0, vec, size, ar.length);
+        size += ar.length;
+    }
+    
+    public boolean addAll(int index, int[] ar) {
+        if (index < 0 || index > size) return false;
+        while (size + ar.length > vec.length) {
+            ensureCapacity();
+        }
+        System.arraycopy(vec, index, vec, index + ar.length, size - index);
+        System.arraycopy(ar, 0, vec, index, ar.length);
+        size += ar.length;
+        return true;
+    }
+    
+    public int remove(int index) {
+        if (index < 0 || index >= size) return -666;
+        int removedValue = vec[index];
+        System.arraycopy(vec, index + 1, vec, index, size - index - 1);
+        size--;
+        return removedValue;
+    }
+    
+    public void clear() {
+        size = 0;
+    }
+    
+    public boolean equals(Vector other) {
+        if (this.size != other.size) return false;
+        for (int i = 0; i < size; i++) {
+            if (this.vec[i] != other.vec[i]) return false;
+        }
+        return true;
+    }
+    
+    private void ensureCapacity() {
+        if (size == vec.length) {
+            vec = Arrays.copyOf(vec, vec.length * 2);
+        }
+    }
+    
+    @Override
+    public String toString() {
+        return Arrays.toString(Arrays.copyOf(vec, size));
+    }
+    
+    public static void main(String[] args) {
+        Vector v1 = new Vector();
+        Vector v2 = new Vector(5);
+        Vector v3 = new Vector(new int[]{1, 2, 3, 4, 5});
+
+        v1.add(10);
+        v1.add(20);
+        v1.add(30);
+        System.out.println("v1 after additions: " + v1);
+        
+        v1.add(1, 15);
+        System.out.println("v1 after inserting 15 at index 1: " + v1);
+        
+        v1.remove(2);
+        System.out.println("v1 after removing element at index 2: " + v1);
+        
+        v1.set(0, 100);
+        System.out.println("v1 after setting index 0 to 100: " + v1);
+        
+        v1.addAll(new int[]{40, 50, 60});
+        System.out.println("v1 after adding array: " + v1);
+        
+        v1.clear();
+        System.out.println("v1 after clear: " + v1);
+        
+        System.out.println("v3: " + v3);
+        System.out.println("v3 equals v1: " + v3.equals(v1));
+    }
+}
